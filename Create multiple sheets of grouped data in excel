@@ -1,0 +1,34 @@
+import pandas as pd
+
+# Read the Excel file
+input_file = 'path/to/your/file/input.xlsx'  
+
+df = pd.read_excel(input_file,sheet_name='input_sheet_name')
+
+# Selecting the required columns
+df = df[
+['Emp ID', 'Name', 'Phone', 'Call Status', 'Role', 'Property Type', 'Address', 'Pincode', 'Area', 'Unit', 'Date of Visit']
+]
+
+
+#Filtered the data based on criteria
+df = df[
+(df['Call Status] =='call_lifted') & 
+(df['Role'] == 'buyer')
+]
+
+#Grouping the data based on specific employee Id
+grouped = df.groupby('Emp ID')
+
+# Create a new Excel writer object
+output_file = 'path/of/output/file/output.xlsx'
+
+#Writing the grouped data into a file
+with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
+    for Emp_id, group in grouped:
+        sheet_name = f'Emp_{Emp_id}'
+
+# Create a sheet name based on employee id
+        group.to_excel(writer, sheet_name=sheet_name, index=False)
+
+print(f'Data has been written to {output_file}'
